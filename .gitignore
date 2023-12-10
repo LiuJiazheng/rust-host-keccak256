@@ -1,0 +1,6 @@
+*.json
+.idea/
+/target
+/output
+pkg
+*.wat
