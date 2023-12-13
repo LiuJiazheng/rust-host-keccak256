@@ -5,3 +5,4 @@
 pkg
 *.wat
 Cargo.lock
+playground
