@@ -77,7 +77,7 @@ use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
 pub fn zkmain() -> i64 {
     let input = [0u64; 17];
-    let output: [u64;4] = [10505131697560449767, 5712001389839908045, 5484132107077402843, 6775505854559963780];
+    let output: [u64;4] = [17376452488221285863, 9571781953733019530, 15391093639620504046, 13624874521033984333];
     let input_u8 = u64_vec_to_u8_vec(input.to_vec());
     let output_u8 = u64_vec_to_u8_vec(output.to_vec());
 

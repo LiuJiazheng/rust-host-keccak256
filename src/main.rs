@@ -1,6 +1,7 @@
+mod keccak256;
 
-use zkwasm_host_circuits::host::keccak256::Keccak;
-pub use zkwasm_host_circuits::host::keccak256::KECCAK_HASHER;
+use crate::keccak256::Keccak;
+pub use crate::keccak256::KECCAK_HASHER;
 
 struct Generator {
     pub cursor: usize,
@@ -111,7 +112,8 @@ fn main() {
     // empty input
     let emtpy_standard_input = [0u64; 17];
     let output_u64 = zkwasm_keccak(&emtpy_standard_input);
-
+    let (_, output_u8) = helper(&emtpy_standard_input);
     println!("output_u64: {:?}", output_u64);
     println!("output_u64.len(): {:?}", output_u64.len());
+    println!("alternative output_u64: {:?}", u8_vec_to_u64_vec(output_u8));
 }
