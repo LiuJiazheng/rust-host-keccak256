@@ -1,7 +1,19 @@
 
-extern crate byteorder;
-use byteorder::{BigEndian, ByteOrder};
+use zkwasm_host_circuits::host::keccak256::Keccak;
+pub use zkwasm_host_circuits::host::keccak256::KECCAK_HASHER;
 
+struct Generator {
+    pub cursor: usize,
+    pub values: Vec<u64>,
+}
+
+impl Generator {
+    fn gen(&mut self) -> u64 {
+        let r = self.values[self.cursor];
+        self.cursor += 1;
+        r
+    }
+}
 
 fn u8_vec_to_u64_vec(input: Vec<u8>) -> Vec<u64> {
     let mut output = input
@@ -27,22 +39,79 @@ fn u64_vec_to_u8_vec(input: Vec<u64>) -> Vec<u8> {
     output
 }
 
+fn helper(input: &[u64;17]) -> (Vec<u8>, Vec<u8>) {
+    use sha3::{Digest, Sha3_256};
+    let input_u8 = u64_vec_to_u8_vec(input.to_vec());
+    // create a SHA3-256 object
+    let mut hasher = Sha3_256::new();
+    // write input message
+    hasher.update(&input_u8);
+    let result = hasher.finalize();
+    let output_u8 = result.to_vec();
+    (input_u8, output_u8)
+}
+
+struct Keccak256Context {
+    pub hasher: Option<Keccak>,
+    pub generator: Generator,
+    pub buf: Vec<u64>,
+}
+
+impl Keccak256Context {
+    fn default() -> Self {
+        Keccak256Context {
+            hasher: None,
+            generator: Generator {
+                cursor: 0,
+                values: vec![],
+            },
+            buf: vec![],
+        }
+    }
+
+    pub fn keccak_new(&mut self, new: usize) {
+        self.buf = vec![];
+        if new != 0 {
+            self.hasher = Some(KECCAK_HASHER.clone());
+        }
+    }
+
+    pub fn keccak_push(&mut self, v: u64) {
+        self.buf.push(v);
+    }
+
+    pub fn keccak_finalize(&mut self) -> u64 {
+        println!("###buf len is {}", self.buf.len());
+        assert!(self.buf.len() == 17);
+        if self.generator.cursor == 0 {
+            println!("###perform hash my hash is {:?}", self.hasher);
+            self.hasher.as_mut().map(|s| {
+                let r = s.update_exact(&self.buf.clone().try_into().unwrap());
+                self.generator.values = r.to_vec();
+            });
+        }
+        self.generator.gen()
+    }
+}
+
+fn zkwasm_keccak(input: &[u64;17]) -> Vec<u64> {
+    let mut context = Keccak256Context::default();
+    context.keccak_new(1);
+    for i in 0..input.len() {
+        context.keccak_push(input[i]);
+    }
+    let mut output_u64 = vec![0; 4];
+    for i in 0..4 {
+        output_u64[i] = context.keccak_finalize();
+    }
+    output_u64
+}
 
 fn main() {
-    //let input:Vec<u8> = [102, 111, 111, 98, 97, 114, 0, 0, 122].to_vec();
-    let input:Vec<u8> = [102, 111, 111, 98, 97, 114, 0, 0, 
-    122, 0, 0, 0, 0, 0, 0, 0,
-    121, 11].to_vec();
-    //let input:Vec<u8> = [102, 111, 111].to_vec();
-    //let input_2d = split_into_2d_array(input);
-    //let output_u64 = u8_to_u64_2d(input_2d);
-    println!("{:?}", input);
-    let output_u64 = u8_vec_to_u64_vec(input);
-    println!("{:?}", output_u64);
-    let output_u8 = u64_vec_to_u8_vec(output_u64);
-    println!("{:?}", output_u8);
-    let mut output_u64 = [15334149082588785787, 16459938944588432275, 1975143395267388522, 11769824114587043277].to_vec();
-    println!("{:?}", u64_vec_to_u8_vec(output_u64));
-    output_u64 = [5428572333363565211, 690714843559919322, 3199586859266957939, 3354118150935030376].to_vec();
-    println!("{:?}", u64_vec_to_u8_vec(output_u64));
+    // empty input
+    let emtpy_standard_input = [0u64; 17];
+    let output_u64 = zkwasm_keccak(&emtpy_standard_input);
+
+    println!("output_u64: {:?}", output_u64);
+    println!("output_u64.len(): {:?}", output_u64.len());
 }

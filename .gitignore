@@ -4,3 +4,4 @@
 /output
 pkg
 *.wat
+Cargo.lock
