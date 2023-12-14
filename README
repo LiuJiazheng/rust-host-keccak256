@@ -1,4 +1,9 @@
-# build the image:
+##build the image:
 ```
 wasm-pack build --release
 ```
+
+##run end to end test
+./playground/zk-build.sh
+
+Please notice that the bianries used in script need to be re-located.
