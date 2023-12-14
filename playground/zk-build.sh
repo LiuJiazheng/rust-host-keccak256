@@ -3,10 +3,9 @@
 set -e
 set -x
 
-# rm -rf output
-# rm -rf param
-# rm -rf *.json
-# mkdir output
+rm -rf output
+rm -rf param
+rm -rf *.json
 
 #wasm image
 FILE=$1
