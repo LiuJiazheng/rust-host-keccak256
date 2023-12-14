@@ -5,4 +5,8 @@
 pkg
 *.wat
 Cargo.lock
-playground
+playground/*.json
+playground/output
+playground/param
+playground/sol/contracts/AggregatorVerifierStep*.sol
+playground/sol/contracts/AggregatorConfig.sol
