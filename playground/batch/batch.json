@@ -1,0 +1,15 @@
+{
+    "equivalents": [
+        {
+            "source": {"name": "host.KECCAKHASH", "proof_idx": 0, "column_name": "shared_opcodes"},
+            "target": {"name": "zkwasm", "proof_idx": 0, "column_name": "shared_opcodes"}
+        },
+	{
+            "source": {"name": "host.KECCAKHASH", "proof_idx": 0, "column_name": "shared_operands"},
+            "target": {"name": "zkwasm", "proof_idx": 0, "column_name": "shared_operands"}
+	}
+    ],
+    "expose": [],
+    "absorb": []
+}
+
