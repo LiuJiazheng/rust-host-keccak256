@@ -1,0 +1,10 @@
+[submodule "zkWasm"]
+	path = zkWasm
+	url = https://github.com/DelphinusLab/zkWasm.git
+	branch = host-ops-1.6
+[submodule "zkWasm-host-circuits"]
+	path = zkWasm-host-circuits
+	url = https://github.com/DelphinusLab/zkWasm-host-circuits.git
+[submodule "continuation-batcher"]
+	path = continuation-batcher
+	url = https://github.com/DelphinusLab/continuation-batcher.git

@@ -2,6 +2,7 @@
 .idea/
 /target
 /output
+param/
 pkg
 *.wat
 Cargo.lock
