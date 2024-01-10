@@ -1,9 +1,17 @@
-##build the image:
+## pull submodules:
 ```
-wasm-pack build --release
+make pull
 ```
 
-##run end to end test
+## run end to end test
 ./playground/zk-build.sh
 
-Please notice that the bianries used in script need to be re-located.
+## clean data & rust targets
+```
+make clean
+```
+
+## rebuild rust targets
+```
+make build
+```
